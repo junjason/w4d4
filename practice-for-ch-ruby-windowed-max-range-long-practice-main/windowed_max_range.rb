@@ -161,8 +161,8 @@ end
 
 class MinMaxStackQueue
     def initialize
-        @enqueue_stack = MyStack.new
-        @dequeue_stack = MyStack.new
+        @enqueue_stack = MinMaxStack.new
+        @dequeue_stack = MinMaxStack.new
         @max_el = nil
         @min_el = nil
     end
@@ -175,6 +175,9 @@ class MinMaxStackQueue
             end
         end
         @enqueue_stack.push(element)
+
+        @max_el = element if @max_el == nil || element > @max_el
+        @min_el = element if @min_el == nil || element < @min_el
     end
 
     def dequeue
@@ -184,7 +187,23 @@ class MinMaxStackQueue
                 @enqueue_stack.push(el)
             end
         end
-        @dequeue_stack.pop
+        
+        if @dequeue_stack.peek == @max_el
+            @dequeue_stack.pop
+            #find new max_el
+            @max_el = @dequeue_stack.max
+        elsif @dequeue_stack.peek == @min_el
+            @dequeue_stack.pop
+            #find new min_el
+            @min_el = @dequeue_stack.min
+        else
+            @dequeue_stack.pop
+        end
+
+        if empty?
+            @max_el = nil
+            @min_el = nil
+        end
     end
 
     def size 
@@ -193,5 +212,13 @@ class MinMaxStackQueue
 
     def empty?
         @enqueue_stack.empty? && @dequeue_stack.empty?
+    end
+
+    def max
+        @max_el
+    end
+
+    def min
+        @min_el
     end
 end
