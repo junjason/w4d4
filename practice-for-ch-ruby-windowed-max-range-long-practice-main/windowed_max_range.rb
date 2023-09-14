@@ -97,12 +97,101 @@ class StackQueue
         end
         @dequeue_stack.pop
     end
+
+    def size 
+        @enqueue_stack.size + @dequeue_stack.size
+    end
+
+    def empty?
+        @enqueue_stack.empty? && @dequeue_stack.empty?
+    end
 end
 
-class MinMaxStack
 
+class MinMaxStack
+    def initialize
+        @store = Array.new
+        @max_el = nil
+        @min_el = nil
+    end 
+
+    def peek
+        @store[-1]
+    end
+
+    def size
+        @store.length
+    end
+
+    def empty?
+        @store.empty?
+    end
+
+    def push(element)
+        @store.push(element)
+        @max_el = element if @max_el == nil || element > @max_el
+        @min_el = element if @min_el == nil || element < @min_el
+    end
+
+    def pop(element)
+        if peek == @max_el
+            @store.pop
+            @max_el = @store.max if !empty?
+        elsif peek == @min_el
+            @store.pop
+            @min_el = @store.min if !empty?
+        else
+            @store.pop
+        end
+        
+        if empty?
+            @max_el = nil
+            @min_el = nil
+        end
+    end
+
+    def max
+        @max_el
+    end
+
+    def min
+        @min_el
+    end
 end
 
 class MinMaxStackQueue
+    def initialize
+        @enqueue_stack = MyStack.new
+        @dequeue_stack = MyStack.new
+        @max_el = nil
+        @min_el = nil
+    end
 
+    def enqueue(element)
+        if @enqueue_stack.empty?
+            while !@dequeue_stack.empty?
+                el = @dequeue_stack.pop
+                @enqueue_stack.push(el)
+            end
+        end
+        @enqueue_stack.push(element)
+    end
+
+    def dequeue
+        if @dequeue_stack.empty?
+            while !@enqueue_stack.empty?
+                el = @enqueue_stack.pop
+                @enqueue_stack.push(el)
+            end
+        end
+        @dequeue_stack.pop
+    end
+
+    def size 
+        @enqueue_stack.size + @dequeue_stack.size
+    end
+
+    def empty?
+        @enqueue_stack.empty? && @dequeue_stack.empty?
+    end
 end
