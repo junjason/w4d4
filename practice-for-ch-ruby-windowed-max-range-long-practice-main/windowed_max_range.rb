@@ -15,10 +15,10 @@ def windowed_max_range(arr, window_size)
     max_range
 end
 
-p windowed_max_range([1, 0, 2, 5, 4, 8], 2) == 4 # 4, 8
-p windowed_max_range([1, 0, 2, 5, 4, 8], 3) == 5 # 0, 2, 5
-p windowed_max_range([1, 0, 2, 5, 4, 8], 4) == 6 # 2, 5, 4, 8
-p windowed_max_range([1, 3, 2, 5, 4, 8], 5) == 6 # 3, 2, 5, 4, 8
+# p windowed_max_range([1, 0, 2, 5, 4, 8], 2) == 4 # 4, 8
+# p windowed_max_range([1, 0, 2, 5, 4, 8], 3) == 5 # 0, 2, 5
+# p windowed_max_range([1, 0, 2, 5, 4, 8], 4) == 6 # 2, 5, 4, 8
+# p windowed_max_range([1, 3, 2, 5, 4, 8], 5) == 6 # 3, 2, 5, 4, 8
 
 class MyQueue
     def initialize
@@ -222,3 +222,32 @@ class MinMaxStackQueue
         @min_el
     end
 end
+
+def windowed_max_range_2(arr, window_size)
+    i = 0
+    j = i + window_size
+
+    max_range = 0
+
+    while j <= arr.length
+        window = MinMaxStackQueue.new
+        k = i
+        while k < j
+            window.enqueue(arr[k])
+            k += 1
+        end
+        range = window.max - window.min
+        max_range = range if range > max_range
+
+        i += 1
+        j += 1
+    end
+
+    max_range
+
+end
+
+p windowed_max_range_2([1, 0, 2, 5, 4, 8], 2) == 4 # 4, 8
+p windowed_max_range_2([1, 0, 2, 5, 4, 8], 3) == 5 # 0, 2, 5
+p windowed_max_range_2([1, 0, 2, 5, 4, 8], 4) == 6 # 2, 5, 4, 8
+p windowed_max_range_2([1, 3, 2, 5, 4, 8], 5) == 6 # 3, 2, 5, 4, 8
